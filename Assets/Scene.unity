@@ -922,6 +922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubePrefab: {fileID: 100000, guid: cacb219a51622a84aa5d449a83ecfe05, type: 2}
+  m_hexPerspective: 0
 --- !u!4 &1037992004
 Transform:
   m_ObjectHideFlags: 0
@@ -1226,6 +1227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e051874e41bab7a489343925f4ac99c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cubeGrid: {fileID: 1037992003}
 --- !u!1001 &1354433680
 Prefab:
   m_ObjectHideFlags: 0

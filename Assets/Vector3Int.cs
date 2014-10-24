@@ -17,6 +17,11 @@ public struct Vector3Int
 		return new Vector3 ((float)v.x, (float)v.y, (float)v.z);
 	}
 
+	public static explicit operator Vector3Int(Vector3 v)
+	{
+		return new Vector3Int ((int)v.x, (int)v.y, (int)v.z);
+	}
+
 	public override int GetHashCode ()
 	{
 		unchecked // Overflow is fine, just wrap

@@ -3,10 +3,11 @@ using System.Collections;
 
 public class KeyboardCameraControl : MonoBehaviour {
 
+	public CubeGrid cubeGrid;
 	private Quaternion desiredRotation;
 	private Quaternion currentRotation;
 	private Quaternion rotation;
-	private float distance = 11.3f;
+	private float distance = 50.0f;
 	private Vector3 position;
 	private float dampening = 5.0f;
 	private Vector3 targetPosition;
@@ -23,10 +24,12 @@ public class KeyboardCameraControl : MonoBehaviour {
 		if (Input.GetKeyDown ("a")) 
 		{
 			setCameraRotation(35.0f, 315.0f);
+			cubeGrid.m_hexPerspective = true;
 		}
 		if (Input.GetKeyDown ("s")) 
 		{
 			setCameraRotation(0.0f, -90.0f);
+			cubeGrid.m_hexPerspective = false;
 		}
 		if (Input.GetKeyDown ("d")) 
 		{
