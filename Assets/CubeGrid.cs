@@ -3,18 +3,6 @@ using System.Collections.Generic;
 
 public class CubeGrid : MonoBehaviour {
 
-	//x + y = z
-	//u,v -> x,y,z
-	//0,0 -> -4,-4,8
-
-	//0,0,0
-
-	//1,0,1
-	//0,-1,2
-
-	//(x + y - z)^2/3 =  w
-	//
-
 	public GameObject cubePrefab;
 	public Dictionary<Vector3Int, GameObject> m_cubes;
 	public Vector3Int m_minPos;
@@ -38,6 +26,8 @@ public class CubeGrid : MonoBehaviour {
 		//1 1 3 = 1 5
 		//2 2 2 = 2 6
 		//3 3 1 = 3 7
+		m_cubes [new Vector3Int (0, 0, 8)].GetComponent<ColorScript> ().setGameColor (Color.red);
+		m_cubes [new Vector3Int (0, 2, 10)].GetComponent<ColorScript> ().setGameColor (new Color(0.0f, 1.0f, 0.5f));
 		setMinMax ();
 	}
 	
@@ -139,7 +129,9 @@ public class CubeGrid : MonoBehaviour {
 		//make sure it's a chesspiece
 		//if(hit.transform.tag != "ChessPiece")
 		//	return;
-
+		ColorScript colorScript = hit.transform.GetComponent<ColorScript> ();
+		if (colorScript == null)
+			return;
 		//hit.transform.renderer.material.color = Color.white;
 		Vector3Int pos = (Vector3Int)hit.transform.position;
 
@@ -148,9 +140,19 @@ public class CubeGrid : MonoBehaviour {
 		 cubes = getClosestAdjacentHexagons (pos.x, pos.y, pos.z);
 		else
 			cubes = getClosestAdjacentSquares(pos.x, pos.y, pos.z);
+
+		Color clickedColor = colorScript.getGameColor ();
+		colorScript.activateColor();
 		foreach (GameObject cube in cubes) 
 		{
-			cube.renderer.material.color = Color.white;
+			cube.GetComponent<ColorScript>().activateColorAsAdjacent(clickedColor);
+			//cube.GetComponent<ColorScript>().setGameColor(Color.red + Color.blue);
+		}
+
+		List<GameObject> outerCubes = getClosestOuterHexagonRing (pos.x, pos.y, pos.z);
+		foreach (GameObject cube in outerCubes)
+		{
+			cube.GetComponent<ColorScript>().activateColorAsOuterRing(clickedColor);
 		}
 
 		//getClosestHexagon (pos.x, pos.y, pos.z).renderer.material.color = Color.white;
@@ -324,6 +326,27 @@ public class CubeGrid : MonoBehaviour {
 			cubes.Add (cube3);
 		if(cube4)
 			cubes.Add (cube4);
+		return cubes;
+	}
+
+	List<GameObject> getClosestOuterHexagonRing(int x, int y, int z)
+	{
+		List<GameObject> cubes = new List<GameObject>();
+		List<GameObject> adjacentCubes = getClosestAdjacentHexagons (x, y, z);
+		GameObject centerCube = getClosestHexagon (x, y, z);
+		foreach(GameObject cube in adjacentCubes)
+		{
+			Vector3Int cubePos = (Vector3Int) cube.transform.position;
+			List<GameObject> adjacentCubes2 = getClosestAdjacentHexagons(cubePos.x, cubePos.y, cubePos.z);
+			foreach(GameObject cube2 in adjacentCubes2)
+			{
+				if(!adjacentCubes.Contains(cube2) && !cubes.Contains(cube2) && cube2 != centerCube)
+				{
+					cubes.Add(cube2);
+				}
+			}
+		}
+
 		return cubes;
 	}
 
